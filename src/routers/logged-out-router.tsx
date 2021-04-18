@@ -1,15 +1,8 @@
-import React from 'react'
-import { isLoggedInVar } from '../apollo'
+import React from "react";
+import {BrowserRouter as Router} from 'react-router-dom'
 
-export const LoggedOutRouter  =() => {
-    const onClick = () => {
-        isLoggedInVar(true);
-    }
-    
-    return(
-        <>
-        <h1>Logged out</h1>
-        <button onClick ={onClick}>Click to log In</button>
-        </>
-    )
-}
+export const LoggedOutRouter = () => {
+  
+  return <Router></Router>
+  
+};
