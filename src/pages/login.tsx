@@ -1,11 +1,12 @@
 import React from 'react';
-import { useMutation } from '@apollo/client';
-import gql from 'graphql-tag';
+import { useMutation, gql } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { FormError } from '../components/form-error';
+import { loginMutation, loginMutationVariables } from '../__generated__/loginMutation';
+
 
 const LOGIN_MUTATION = gql`
- mutation TestMutation($email: String!, $password: String!){
+ mutation loginMutation($email: String!, $password: String!){
    login(input:{
      email: $email,
      password: $password
@@ -18,16 +19,23 @@ const LOGIN_MUTATION = gql`
 `;
 
 interface ILoginForms{
-  email?:string;
-  password?:string;
+  email:string;
+  password:string;
 }
 
 export const Login = () => {
   const {register, getValues, errors, handleSubmit} = useForm<ILoginForms>()
-  const [loginMutation] = useMutation(LOGIN_MUTATION);
+  const [loginMutation, {data}] = useMutation<loginMutation, loginMutationVariables>(LOGIN_MUTATION);
   const onSubmit = () => {
-    console.log(getValues())
-  }
+    const {password, email} = getValues();
+    loginMutation({
+      variables:{
+        email,
+        password
+      },
+    });
+  };
+  
 
     return <div className="h-screen flex items-center justify-center bg-gray-800">
       <div className="bg-white w-full max-w-lg pt-7 pb-7 rounded-lg text-center">        
