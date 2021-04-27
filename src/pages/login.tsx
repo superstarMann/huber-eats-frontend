@@ -1,21 +1,18 @@
 import React from 'react';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation, gql, ApolloError } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import { FormError } from '../components/form-error';
 import { loginMutation, loginMutationVariables } from '../__generated__/loginMutation';
 
 
 const LOGIN_MUTATION = gql`
- mutation loginMutation($email: String!, $password: String!){
-   login(input:{
-     email: $email,
-     password: $password
-   }) {
-     ok
-     token
-     error
-   }
- }
+mutation loginMutation($loginInput: LoginInput!) {
+  login(input: $loginInput) {
+    ok
+    token
+    error
+  }
+}
 `;
 
 interface ILoginForms{
@@ -24,16 +21,28 @@ interface ILoginForms{
 }
 
 export const Login = () => {
-  const {register, getValues, errors, handleSubmit} = useForm<ILoginForms>()
-  const [loginMutation, {data}] = useMutation<loginMutation, loginMutationVariables>(LOGIN_MUTATION);
+  const {register, getValues, errors, handleSubmit, watch} = useForm<ILoginForms>()
+  const onCompleted = (data: loginMutation) =>{
+    const {login :{ok,token}} =data
+    if(ok){
+      console.log(token);
+    }
+  }
+  const [loginMutation, {data: loginMutationResult, loading}] = useMutation<loginMutation, loginMutationVariables>(LOGIN_MUTATION, {
+    onCompleted
+  });
   const onSubmit = () => {
-    const {password, email} = getValues();
+    if(!loading){
+      const {password, email} = getValues();
     loginMutation({
       variables:{
-        email,
-        password
+        loginInput:{
+          email,
+          password
+        }
       },
     });
+    }
   };
   
 
@@ -66,8 +75,9 @@ export const Login = () => {
                    <FormError errorMessage='Password must be more than 10 chars'/>
               )}
               <button className='mt-3 btn'>
-                Login
+                {loading ? 'Loading....' : 'Log In'}
               </button>
+              {loginMutationResult?.login.error && <FormError errorMessage={loginMutationResult.login.error}/>}
           </form>
       </div>
       </div>
