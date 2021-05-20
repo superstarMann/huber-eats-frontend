@@ -5,7 +5,7 @@ import { FormError } from '../components/form-error';
 import huberLogo from '../images/eats-logo.svg';
 import { Button } from '../components/button';
 import { Link, useHistory } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { UserRole } from '../__generated__/globalTypes';
 import { createAccountMutation, createAccountMutationVariables } from '../__generated__/createAccountMutation';
 
@@ -37,7 +37,8 @@ export const CreateAccount = () => {
   const onCompleted = (data: createAccountMutation) => {
       const {createAccount: {ok, error}} = data;
       if(ok){
-          history.push("/login")
+        alert('Account Created! Log in now!')
+        history.push("/");
       }
   }
   const [createAccountMutation, {loading, data: createAccountMutationResult}] = useMutation<createAccountMutation, createAccountMutationVariables>(CREATE_ACCOUNT_MUTATION,{onCompleted});
@@ -107,7 +108,7 @@ export const CreateAccount = () => {
           </form>
           <div>
             Already have an account?{""}
-            <Link to="/login" className=" text-lime-600 hover:underline ml-2">
+            <Link to="/" className=" text-lime-600 hover:underline ml-2">
               Log in now
             </Link>
           </div>

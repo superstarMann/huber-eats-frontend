@@ -6,8 +6,9 @@ import { loginMutation, loginMutationVariables } from '../__generated__/loginMut
 import huberLogo from '../images/eats-logo.svg';
 import { Button } from '../components/button';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
-import { isLoggedInVar } from '../apollo';
+import { Helmet } from 'react-helmet-async';
+import { authTokenVar, isLoggedInVar } from '../apollo';
+import { LOCALSTORAGE_TOKEN } from '../constants';
 
 
 const LOGIN_MUTATION = gql`
@@ -29,8 +30,9 @@ export const Login = () => {
   const {register, getValues, errors, handleSubmit, formState} = useForm<ILoginForms>({mode: "onChange"})
   const onCompleted = (data: loginMutation) =>{
     const {login :{ok,token}} =data
-    if(ok){
-      console.log(token);
+    if(ok && token){
+      localStorage.setItem(LOCALSTORAGE_TOKEN, token);
+      authTokenVar(token);
       isLoggedInVar(true);
     }
   }
@@ -91,7 +93,7 @@ export const Login = () => {
               {errors.password?.type === 'minLength' && (
                    <FormError errorMessage='Password must be more than 10 chars'/>
               )}
-              <Button canClick={formState.isValid} loading={loading} actionText={"Create Account"}/>
+              <Button canClick={formState.isValid} loading={loading} actionText={"Log In"}/>
               {loginMutationResult?.login.error && (<FormError errorMessage={loginMutationResult.login.error}/>)}
           </form>
           <div>
