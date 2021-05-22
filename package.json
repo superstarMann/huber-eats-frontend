@@ -13,6 +13,7 @@
     "@types/react-dom": "^17.0.0",
     "apollo": "^2.32.8",
     "autoprefixer": "^10.2.5",
+    "cross-env": "^7.0.3",
     "graphql": "^15.5.0",
     "postcss": "^8.2.10",
     "react": "^17.0.2",
@@ -28,6 +29,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
+    "tailwind:probuild":"cross-env npm run tailwind:build",
     "tailwind:build": "tailwind build ./src/styles/tailwind.css -o ./src/styles/styles.css",
     "start": "npm run apollo:codegen & npm run tailwind:build & react-scripts start",
     "apollo:codegen": "rimraf src/__generated__ && apollo client:codegen src/__generated__ --target=typescript --outputFlat",
