@@ -26,16 +26,16 @@ interface ICreateAccountForms{
 }
 
 export const CreateAccount = () => {
-  const {register, getValues, errors, handleSubmit, formState, watch} = useForm<ICreateAccountForms>({
+  const {register, getValues, errors, handleSubmit, formState } = useForm<ICreateAccountForms>({
       mode: "onChange",
       defaultValues:{ //초기 설정값
           role: UserRole.Client
-      }
+      } 
     });
 
   const history = useHistory();
   const onCompleted = (data: createAccountMutation) => {
-      const {createAccount: {ok, error}} = data;
+      const {createAccount: {ok}} = data;
       if(ok){
         alert('Account Created! Log in now!')
         history.push("/");
