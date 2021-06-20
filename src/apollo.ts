@@ -8,20 +8,19 @@ export const authTokenVar = makeVar(token);
 
 const httpLink = createHttpLink({
   uri: "http://localhost:4000/graphql",
-})
+});
 
-const authLink = setContext((_, {headers}) => {
-  console.log(headers);
-  return{
+const authLink = setContext((_, { headers }) => {
+  return {
     headers: {
       ...headers,
       "x-jwt": authTokenVar() || "",
-    }
-  }
+    },
+  };
 });
 
 export const client = new ApolloClient({
-  link:authLink.concat(httpLink),
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -31,11 +30,11 @@ export const client = new ApolloClient({
               return isLoggedInVar();
             },
           },
-          token:{
+          token: {
             read() {
               return authTokenVar();
-            }
-          }
+            },
+          },
         },
       },
     },

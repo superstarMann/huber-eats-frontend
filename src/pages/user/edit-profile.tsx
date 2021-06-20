@@ -1,9 +1,13 @@
-import React from 'react';
-import { gql, useApolloClient, useMutation } from '@apollo/client';
-import { useForm } from 'react-hook-form';
-import { Button } from '../../components/button';
-import { useMe } from '../../hooks/useMe';
-import { editProfile, editProfileVariables } from '../../__generated__/editProfile';
+import { gql, useApolloClient, useMutation } from "@apollo/client";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { Button } from "../../components/button";
+import { useMe } from "../../hooks/useMe";
+import {
+  editProfile,
+  editProfileVariables,
+} from "../../__generated__/editProfile";
+import {Helmet} from 'react-helmet'
 
 const EDIT_PROFILE_MUTATION = gql`
   mutation editProfile($input: EditProfileInput!) {
@@ -13,6 +17,7 @@ const EDIT_PROFILE_MUTATION = gql`
     }
   }
 `;
+
 interface IFormProps {
   email?: string;
   password?: string;
@@ -72,6 +77,9 @@ export const EditProfile = () => {
   };
   return (
     <div className="mt-52 flex flex-col justify-center items-center">
+      <Helmet>
+        <title>Edit Profile | Nuber Eats</title>
+      </Helmet>
       <h4 className="font-semibold text-2xl mb-3">Edit Profile</h4>
       <form
         onSubmit={handleSubmit(onSubmit)}
